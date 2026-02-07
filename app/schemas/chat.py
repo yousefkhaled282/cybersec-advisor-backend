@@ -15,3 +15,9 @@ class ChatResponse(BaseModel):
     response: str
     chat_id: str
     tokens_used: int
+
+# 3. NEW: Standard Envelope (Generic)
+class APIResponse(BaseModel, Generic[T]):
+    status: int = Field(..., description="HTTP Status Code (e.g. 200, 400)")
+    msg: str = Field(..., description="Human-readable message (Success/Error)")
+    data: Optional[T] = Field(None, description="The payload (ChatData)")    
