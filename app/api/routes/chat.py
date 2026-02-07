@@ -13,6 +13,7 @@ router = APIRouter()
 PROMPT_PATH = Path("app/resources/prompts/system_prompt.txt")
 BASE_PROMPT = PROMPT_PATH.read_text() if PROMPT_PATH.exists() else "You are a cybersecurity expert."
 
+# Ensure the response model matches the Generic definition
 @router.post("/ask", response_model=APIResponse[ChatData], dependencies=[Depends(verify_app_check)])
 async def ask_advisor(request: ChatRequest):
     start_time = time.time()
@@ -59,6 +60,7 @@ async def ask_advisor(request: ChatRequest):
         logger.info(f"🏁 [COMPLETE] Request finished in {round(time.time() - start_time, 2)}s.")
 
         # --- NEW RETURN FORMAT ---
+        # Note: We are using ChatData here to match the response_model
         return APIResponse(
             status=200,
             msg="Success",
@@ -70,7 +72,6 @@ async def ask_advisor(request: ChatRequest):
         )
 
     except HTTPException as http_exc:
-        # Catch known HTTP exceptions (like 400 Token Limit) and wrap them
         logger.warning(f"⚠️ Handled Error: {http_exc.detail}")
         return APIResponse(
             status=http_exc.status_code,
@@ -79,8 +80,6 @@ async def ask_advisor(request: ChatRequest):
         )
 
     except Exception as e:
-        # Catch unexpected server errors
         logger.error(f"❌ Critical Error: {str(e)}")
-        # We re-raise 500 so FastAPI logs it properly, 
-        # or you can return APIResponse(status=500, msg="Internal Server Error")
+        # Raise 500 so FastAPI knows it's a server error
         raise HTTPException(status_code=500, detail="Internal Server Error")
