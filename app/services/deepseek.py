@@ -13,7 +13,7 @@ class DeepSeekService:
         
         # Endpoint construction for Vertex AI Model Garden
         self.endpoint_url = (
-            f"https://{self.location}-aiplatform.googleapis.com"
+            f"https://aiplatform.googleapis.com"
             f"/v1beta1/projects/{self.project_id}/locations/{self.location}"
             "/endpoints/openapi/chat/completions"
         )
