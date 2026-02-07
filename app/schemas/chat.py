@@ -1,5 +1,8 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Any, Generic, TypeVar
+
+# Generic Type Variable
+T = TypeVar('T')
 
 class ChatRequest(BaseModel):
     user_id: str = Field(..., description="Unique user identifier")
