@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+gunicorn
+pydantic-settings
+firebase-admin
+google-cloud-firestore
+google-auth
+requests
+python-multipart
+httpx
