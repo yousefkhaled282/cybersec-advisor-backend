@@ -41,10 +41,21 @@ async def ask_advisor(request: ChatRequest):
         messages = [{"role": "system", "content": system_instruction}]
         logger.info("✅ [3/6] System prompt constructed with user facts.")
 
-        # 4. Fetch Specific Chat History
+        # 4. Fetch & Formulate History
         history = firestore_service.get_chat_history(request.user_id, request.chat_id)
-        msg_count = len(history)
-        messages.extend(history)
+        
+        if history:
+            # Add a marker explicitly stating this is memory
+            messages.append({"role": "system", "content": "--- PREVIOUS CONVERSATION HISTORY START ---"})
+            
+            # Inject the actual history
+            messages.extend(history)
+            
+            # Add a marker stating history is over
+            messages.append({"role": "system", "content": "--- PREVIOUS CONVERSATION HISTORY END ---"})
+        
+        # Add Current User Message
+        messages.append({"role": "user", "content": request.message})
         
         # Add Current User Message
         messages.append({"role": "user", "content": request.message})
