@@ -11,7 +11,7 @@ app.include_router(chat.router, prefix=settings.API_V1_STR, tags=["chat"])
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok", "environment": "Cloud Run"}
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
